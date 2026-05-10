@@ -81,9 +81,9 @@ class FieldLog {
       weatherDescription: map['weatherDescription'] as String?,
       localImagePath: map['localImagePath'] as String?,
       remoteImagePath: map['remoteImagePath'] as String?,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updated_at'] as int),
-      syncedToServer: map['synced_to_server'] as int,
+      createdAt: DateTime.parse(map['createdAt'] as String),
+      updatedAt: DateTime.parse(map['updatedAt'] as String),
+      syncedToServer: map['syncedToServer'] as int,
     );
   }
 

@@ -21,17 +21,24 @@ class LogDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (log.localImagePath != null) ...[
+            if (log.localImagePath != null || log.remoteImagePath != null) ...[
               Hero(
                 tag: log.id,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.file(
-                    File(log.localImagePath!),
-                    width: double.infinity,
-                    height: 250,
-                    fit: BoxFit.cover,
-                  ),
+                  child: log.remoteImagePath != null
+                      ? Image.network(
+                          log.remoteImagePath!,
+                          width: double.infinity,
+                          height: 250,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.file(
+                          File(log.localImagePath!),
+                          width: double.infinity,
+                          height: 250,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -45,10 +52,7 @@ class LogDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              log.notes,
-              style: const TextStyle(fontSize: 18),
-            ),
+            Text(log.notes, style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 20),
             const Text(
               'Location',

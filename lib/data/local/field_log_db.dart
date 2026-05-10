@@ -61,9 +61,14 @@ class FieldLogDb {
     await db.update(_table, log.toMap(), where: 'id = ?', whereArgs: [log.id]);
   }
 
-  Future<List<FieldLog>> getAllByNewestFirst() async {
+  Future<List<FieldLog>> getAllByNewestFirst(String userId) async {
     final db = await database;
-    final rows = await db.query(_table, orderBy: 'created_at DESC');
+    final rows = await db.query(
+      _table,
+      orderBy: 'created_at DESC',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
     return rows.map(FieldLog.fromMap).toList();
   }
 
@@ -79,12 +84,12 @@ class FieldLogDb {
     return FieldLog.fromMap(rows.first);
   }
 
-  Future<List<FieldLog>> pendingSync() async {
+  Future<List<FieldLog>> pendingSync(String userId) async {
     final db = await database;
     final rows = await db.query(
       _table,
-      where: 'synced_to_server = ?',
-      whereArgs: [0],
+      where: 'synced_to_server = ? AND user_id = ?',
+      whereArgs: [userId, 0],
       orderBy: 'created_at DESC',
     );
     return rows.map(FieldLog.fromMap).toList();

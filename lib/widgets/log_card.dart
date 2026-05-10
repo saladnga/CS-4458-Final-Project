@@ -38,7 +38,14 @@ class LogCard extends StatelessWidget {
                 tag: log.id,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: log.localImagePath != null
+                  child: log.remoteImagePath != null
+                      ? Image.network(
+                          log.remoteImagePath!,
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                        )
+                      : log.localImagePath != null
                       ? Image.file(
                           File(log.localImagePath!),
                           width: 60,

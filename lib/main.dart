@@ -20,7 +20,9 @@ class FieldLogsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => FieldLogController()..refresh(),
+      create: (_) =>
+          FieldLogController(userId: FirebaseAuth.instance.currentUser!.uid)
+            ..refresh(),
       child: MaterialApp(
         title: 'Field Logs App',
         theme: ThemeData.dark(),
@@ -51,7 +53,14 @@ class AuthGate extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         }
-        if (snapshot.hasData) return const HomeShell();
+        final user = snapshot.data;
+        if (user != null) {
+          return ChangeNotifierProvider(
+            key: ValueKey(user.uid),
+            create: (_) => FieldLogController(userId: user.uid)..refresh(),
+            child: const HomeShell(),
+          );
+        }
         return const AuthScreen();
       },
     );
