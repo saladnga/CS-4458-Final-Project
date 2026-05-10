@@ -23,6 +23,7 @@ jobs:
             );
           }
           EOF
+          dart format lib/firebase_options.dart
       - run: flutter pub get
       - run: flutter analyze
       - run: dart format --set-exit-if-changed .
