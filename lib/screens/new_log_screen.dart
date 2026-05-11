@@ -219,7 +219,7 @@ class _NewLogScreenState extends State<NewLogScreen> {
                     notes: _notesCtrl.text,
                     localImagePath: _imagePath,
                   );
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   if (c.error != null) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

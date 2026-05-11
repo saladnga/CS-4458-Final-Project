@@ -135,13 +135,17 @@ class _LogDetailScreenState extends State<LogDetailScreen> {
                           width: double.infinity,
                           height: 220,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
-                            width: double.infinity,
-                            height: 220,
-                            color: Colors.grey.shade300,
-                            alignment: Alignment.center,
-                            child: const Icon(Icons.broken_image_outlined, size: 48),
-                          ),
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                                width: double.infinity,
+                                height: 220,
+                                color: Colors.grey.shade300,
+                                alignment: Alignment.center,
+                                child: const Icon(
+                                  Icons.broken_image_outlined,
+                                  size: 48,
+                                ),
+                              ),
                         )
                       : Image.file(
                           File(_log.localImagePath!),

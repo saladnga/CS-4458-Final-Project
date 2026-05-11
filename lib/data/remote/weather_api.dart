@@ -57,7 +57,7 @@ class WeatherApi {
       parts.add('Clouds: $clouds%');
     }
     if (precip != null && precip > 0) {
-      parts.add('Precipitation: ${precip} mm');
+      parts.add('Precipitation: $precip mm');
     }
     if (pressure != null) {
       parts.add('Pressure: ${pressure.round()} hPa');
