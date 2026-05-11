@@ -4,17 +4,21 @@ import '../../model/field_log.dart';
 class FieldLogRemote {
   final _fs = FirebaseFirestore.instance;
 
+  // Firebase storage initialization
   CollectionReference<Map<String, dynamic>> _col(String userId) =>
       _fs.collection('logs').doc(userId).collection('entries');
 
+  // Update/Insert data
   Future<void> upsert(FieldLog log) async {
     await _col(log.userId!).doc(log.id).set(log.toJson());
   }
 
+  // Delete data
   Future<void> delete(String userId, String logId) async {
     await _col(userId).doc(logId).delete();
   }
 
+  // Get all data
   Future<List<FieldLog>> fetchAll(String userId) async {
     final snap = await _col(
       userId,

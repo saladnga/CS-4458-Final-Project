@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project/firebase_options.dart';
-import 'package:flutter_final_project/model/field_log.dart';
 import 'package:flutter_final_project/screens/home_shell.dart';
-import 'package:flutter_final_project/screens/log_detail_screen.dart';
+import 'package:flutter_final_project/screens/profile_screen.dart';
+import 'package:flutter_final_project/state/theme_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'state/field_log_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/auth_screen.dart';
@@ -12,28 +13,36 @@ import './screens/auth_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const FieldLogsApp());
+
+  final prefs = await SharedPreferences.getInstance();
+  final themeController = ThemeController(prefs)..loadSaved();
+
+  runApp(
+    ChangeNotifierProvider<ThemeController>.value(
+      value: themeController,
+      child: const FieldLogsApp(),
+    ),
+  );
 }
 
 class FieldLogsApp extends StatelessWidget {
   const FieldLogsApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) =>
-          FieldLogController(userId: FirebaseAuth.instance.currentUser!.uid)
-            ..refresh(),
-      child: MaterialApp(
+    return Consumer<ThemeController>(
+      builder: (context, theme, _) => MaterialApp(
         title: 'Field Logs App',
-        theme: ThemeData.dark(),
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData.dark(),
+        themeMode: theme.themeMode,
         initialRoute: '/',
         routes: {
           '/': (context) => const AuthGate(),
           '/home': (context) => const HomeShell(),
-          '/detail': (context) {
-            final log = ModalRoute.of(context)!.settings.arguments as FieldLog;
-            return LogDetailScreen(log: log);
-          },
+          '/profile': (context) => const ProfileScreen(),
         },
       ),
     );

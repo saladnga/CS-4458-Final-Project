@@ -1,5 +1,6 @@
 class FieldLog {
   final String id;
+  final String title;
   final String notes;
   final String? userId;
   final double latitude;
@@ -13,6 +14,7 @@ class FieldLog {
 
   FieldLog({
     required this.id,
+    required this.title,
     required this.notes,
     this.userId,
     required this.latitude,
@@ -28,6 +30,7 @@ class FieldLog {
   // For SQFlite Database
   Map<String, dynamic> toMap() => {
     'id': id,
+    'title': title,
     'notes': notes,
     'user_id': userId,
     'latitude': latitude,
@@ -43,6 +46,7 @@ class FieldLog {
   factory FieldLog.fromMap(Map<String, dynamic> map) {
     return FieldLog(
       id: map['id'] as String,
+      title: map['title'] as String,
       notes: map['notes'] as String,
       userId: map['user_id'] as String?,
       latitude: (map['latitude'] as num).toDouble(),
@@ -59,6 +63,7 @@ class FieldLog {
   // For server-side
   Map<String, dynamic> toJson() => {
     'id': id,
+    'title': title,
     'notes': notes,
     'userId': userId,
     'latitude': latitude,
@@ -74,13 +79,15 @@ class FieldLog {
   factory FieldLog.fromJson(Map<String, dynamic> map) {
     return FieldLog(
       id: map['id'] as String,
+      title: map['title'] as String,
       notes: map['notes'] as String,
       userId: map['userId'] as String?,
       latitude: (map['latitude'] as num).toDouble(),
       longitude: (map['longitude'] as num).toDouble(),
       weatherDescription: map['weatherDescription'] as String?,
       localImagePath: map['localImagePath'] as String?,
-      remoteImagePath: map['remoteImagePath'] as String?,
+      remoteImagePath:
+          (map['remoteImageUrl'] ?? map['remoteImagePath']) as String?,
       createdAt: DateTime.parse(map['createdAt'] as String),
       updatedAt: DateTime.parse(map['updatedAt'] as String),
       syncedToServer: map['syncedToServer'] as int,
@@ -89,6 +96,7 @@ class FieldLog {
 
   FieldLog copyWith({
     String? id,
+    String? title,
     String? notes,
     String? userId,
     double? latitude,
@@ -102,6 +110,7 @@ class FieldLog {
   }) {
     return FieldLog(
       id: id ?? this.id,
+      title: title ?? this.title,
       notes: notes ?? this.notes,
       userId: userId ?? this.userId,
       latitude: latitude ?? this.latitude,

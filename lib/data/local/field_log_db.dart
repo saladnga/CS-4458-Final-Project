@@ -17,6 +17,7 @@ class FieldLogDb {
     return _db!;
   }
 
+  // Initialize Local SQFlite Database
   Future<Database> _open() async {
     final dir = await getDatabasesPath();
     final path = p.join(dir, _dbName);
@@ -28,6 +29,7 @@ class FieldLogDb {
         await db.execute('''
             CREATE TABLE $_table (
             id TEXT PRIMARY KEY NOT NULL,
+            title TEXT NOT NULL,
             notes TEXT NOT NULL,
             user_id TEXT,
             latitude REAL NOT NULL,
@@ -47,6 +49,7 @@ class FieldLogDb {
     );
   }
 
+  // Insert operation (Local database)
   Future<void> insert(FieldLog log) async {
     final db = await database;
     await db.insert(
@@ -56,11 +59,19 @@ class FieldLogDb {
     );
   }
 
+  // Update operation (Local database)
   Future<void> update(FieldLog log) async {
     final db = await database;
     await db.update(_table, log.toMap(), where: 'id = ?', whereArgs: [log.id]);
   }
 
+  // Delete operation (Local database)
+  Future<void> delete(String id) async {
+    final db = await database;
+    await db.delete(_table, where: 'id = ?', whereArgs: [id]);
+  }
+
+  // Fetch data by newest
   Future<List<FieldLog>> getAllByNewestFirst(String userId) async {
     final db = await database;
     final rows = await db.query(
@@ -72,6 +83,7 @@ class FieldLogDb {
     return rows.map(FieldLog.fromMap).toList();
   }
 
+  // Search data by id
   Future<FieldLog?> getById(String id) async {
     final db = await database;
     final rows = await db.query(
@@ -84,19 +96,15 @@ class FieldLogDb {
     return FieldLog.fromMap(rows.first);
   }
 
+  // Sync to server (local for no connection)
   Future<List<FieldLog>> pendingSync(String userId) async {
     final db = await database;
     final rows = await db.query(
       _table,
       where: 'synced_to_server = ? AND user_id = ?',
-      whereArgs: [userId, 0],
+      whereArgs: [0, userId],
       orderBy: 'created_at DESC',
     );
     return rows.map(FieldLog.fromMap).toList();
-  }
-
-  Future<void> delete(String id) async {
-    final db = await database;
-    await db.delete(_table, where: 'id = ?', whereArgs: [id]);
   }
 }

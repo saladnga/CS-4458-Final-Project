@@ -5,16 +5,19 @@ import 'package:firebase_storage/firebase_storage.dart';
 class MediaService {
   final ImagePicker _picker = ImagePicker();
 
+  // Camera
   Future<String?> pickFromCamera() async {
     final file = await _picker.pickImage(source: ImageSource.camera);
     return file?.path;
   }
 
+  // Gallery
   Future<String?> pickFromGallery() async {
     final file = await _picker.pickImage(source: ImageSource.gallery);
     return file?.path;
   }
 
+  // Upload through Firebase
   Future<String> uploadImage(
     String localPath,
     String userId,

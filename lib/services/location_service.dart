@@ -7,6 +7,7 @@ class LocationService {
 
   final PermissionService _permission;
 
+  // Capture latitude, longitude
   Future<({double latitude, double longitude})> getCurrentPosition() async {
     final allowed = await _permission.ensureLocation();
     if (!allowed) {

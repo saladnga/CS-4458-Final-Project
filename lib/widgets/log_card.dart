@@ -44,6 +44,12 @@ class LogCard extends StatelessWidget {
                           width: 60,
                           height: 60,
                           fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            width: 60,
+                            height: 60,
+                            color: Colors.grey.shade300,
+                            child: const Icon(Icons.broken_image_outlined),
+                          ),
                         )
                       : log.localImagePath != null
                       ? Image.file(
@@ -66,7 +72,7 @@ class LogCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      log.notes,
+                      log.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -75,19 +81,21 @@ class LogCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
+
                     Text(
                       'Lat: ${log.latitude.toStringAsFixed(4)}, Lng: ${log.longitude.toStringAsFixed(4)}',
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     if (log.weatherDescription != null)
                       Text(
-                        'Weather: ${log.weatherDescription}',
+                        '${log.weatherDescription!.split('\n').first.trim()}',
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.blueGrey,
                         ),
                       ),
                     const SizedBox(height: 2),
+
                     Text(
                       _formatDate(log.createdAt),
                       style: const TextStyle(fontSize: 11, color: Colors.grey),

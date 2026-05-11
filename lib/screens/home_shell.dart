@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project/screens/log_feed_screen.dart';
 import 'package:flutter_final_project/screens/new_log_screen.dart';
+import 'package:flutter_final_project/screens/profile_screen.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -10,8 +11,9 @@ class HomeShell extends StatefulWidget {
 
 class _HomeShellState extends State<HomeShell> {
   int _index = 0;
-  final _pages = const [LogFeedScreen(), NewLogScreen()];
+  final _pages = const [LogFeedScreen(), NewLogScreen(), ProfileScreen()];
 
+  // Bottom Navigation Bar Setup
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +29,7 @@ class _HomeShellState extends State<HomeShell> {
             icon: Icon(Icons.add_circle),
             label: 'New Entry',
           ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
